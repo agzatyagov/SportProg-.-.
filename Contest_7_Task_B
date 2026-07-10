@@ -1,0 +1,41 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+ 
+int main(){
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+ 
+    int t;
+    cin >> t;
+ 
+    while (t--){
+        int n;
+        long long c, d;
+        cin >> n >> c >> d;
+ 
+        int sz = n*n;
+        vector<long long> b(sz);
+ 
+        for (int i = 0; i < sz; i++){
+            cin >> b[i];
+        }
+        sort(b.begin(), b.end());
+ 
+        long long a11 = b[0];
+ 
+        vector<long long> matrix;
+        matrix.reserve(sz);
+ 
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; ++j) {
+                matrix.push_back(a11 + i * c + j * d);
+            }
+        }
+ 
+        sort(matrix.begin(), matrix.end());
+        cout << (matrix ==  b ? "YES" : "NO") << '\n';
+    }
+    return 0;
+}
