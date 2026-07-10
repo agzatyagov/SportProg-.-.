@@ -1,0 +1,45 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+ 
+const long long MOD = 1000000007;
+ 
+int main() {
+    int n, k, m;
+    cin >> n >> k >> m;
+ 
+    vector<bool> danger(n + 1, false);
+    for (int i = 0; i < m; i++) {
+        int a;
+        cin >> a;
+        danger[a] = true;
+    }
+ 
+    vector<long long> dp(n + 1, 0);
+    vector<long long> prefix(n + 1, 0);
+ 
+    dp[0] = 1;
+    prefix[0] = 1;
+ 
+    for (int i = 1; i <= n; i++) {
+        int low = i - k;
+        if (low < 0) low = 0;
+ 
+        long long sum = prefix[i - 1];
+        if (low > 0) {
+            sum = (sum - prefix[low - 1] + MOD) % MOD;
+        }
+ 
+        if (danger[i]) {
+            dp[i] = 0;
+        } else {
+            dp[i] = sum;
+        }
+ 
+        prefix[i] = (prefix[i - 1] + dp[i]) % MOD;
+    }
+ 
+    cout << dp[n] << endl;
+ 
+    return 0;
+}
