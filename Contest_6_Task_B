@@ -1,0 +1,47 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
+ 
+const int INF = 1000000000;
+ 
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+ 
+    int n;
+    cin >> n;
+ 
+    vector<vector<int>> c(n, vector<int>(n));
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            cin >> c[i][j];
+        }
+    }
+ 
+    int M = 1 << n;
+    vector<vector<int>> dp(M, vector<int>(n, INF));
+    dp[1][0] = 0;
+ 
+    for (int mask = 0; mask < M; mask++) {
+        for (int v = 0; v < n; v++) {
+            if (dp[mask][v] == INF) continue;
+ 
+            for (int u = 0; u < n; u++) {
+                if ((mask & (1 << u)) == 0) {
+                    int newMask = mask | (1 << u);
+                    dp[newMask][u] = min(dp[newMask][u], dp[mask][v] + c[v][u]);
+                }
+            }
+        }
+    }
+ 
+    int fullMask = M - 1;
+    int ans = INF;
+ 
+    for (int last = 0; last < n; last++) {
+        ans = min(ans, dp[fullMask][last] + c[last][0]);
+    }
+    cout << ans << '\n';
+    return 0;
+}
